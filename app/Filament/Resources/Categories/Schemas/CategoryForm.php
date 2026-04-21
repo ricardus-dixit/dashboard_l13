@@ -2,11 +2,14 @@
 
 namespace App\Filament\Resources\Categories\Schemas;
 
+use App\Models\Category;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class CategoryForm
 {
@@ -14,30 +17,59 @@ class CategoryForm
     {
         return $schema
             ->components([
-                TextInput::make('parent_id')
-                    ->numeric(),
                 TextInput::make('name')
-                    ->required(),
+                    ->label('Category name')
+                    ->required()
+                    ->live(onBlur:true)
+                    ->afterStateUpdated(fn($state, callable $set) =>
+                        $set('slug', Str::slug($state))),
+
                 TextInput::make('slug')
                     ->required(),
+
+                Select::make('parent_id')
+                    ->label('Parent category')
+                    ->options(self::getCategoryOptions())
+                    ->searchable()
+                    ->nullable(),
+
                 Textarea::make('description')
-                    ->columnSpanFull(),
+                    ->rows(3),
+
                 FileUpload::make('image')
-                    ->image(),
-                TextInput::make('level')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
+                    ->image()
+                    ->directory('categories'),
+
                 TextInput::make('position')
-                    ->required()
                     ->numeric()
                     ->default(0),
-                Toggle::make('status')
-                    ->required(),
+
                 TextInput::make('meta_title'),
+                    
                 Textarea::make('meta_description')
-                    ->columnSpanFull(),
+                    ->rows(2),
+                    
                 TextInput::make('meta_keywords'),
+
+                Toggle::make('status')
+                    ->default(true),
             ]);
+    }
+
+    public static function getCategoryOptions($parentId = null, $prefix = '')
+    {
+        $categories = Category::where('parent_id', $parentId)
+            ->orderBy('position')
+            ->get();
+
+        $options = [];
+
+        foreach ($categories as $category) {
+            $options[$category->id] = $prefix . $category->name;
+
+            $options+=self::getCategoryOptions($category->id, $prefix . '-- ');
+        }
+
+        return $options;
     }
 }
