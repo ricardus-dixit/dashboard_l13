@@ -16,20 +16,32 @@ class BannersTable
     {
         return $table
             ->columns([
+                ImageColumn::make('image')
+                    ->disk('public')
+                    ->imageHeight(50),
+
                 TextColumn::make('title')
-                    ->searchable(),
-                ImageColumn::make('image'),
+                    ->searchable()
+                    ->limit(30),
+
                 TextColumn::make('type')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn($state) => match ($state) {
+                        'slider' => 'success',
+                        'grid' => 'info'
+                    }),
                 TextColumn::make('position')
                     ->numeric()
                     ->sortable(),
+
                 IconColumn::make('status')
                     ->boolean(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

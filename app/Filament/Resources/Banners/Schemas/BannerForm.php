@@ -14,20 +14,28 @@ class BannerForm
     {
         return $schema
             ->components([
-                TextInput::make('title'),
+                TextInput::make('title')
+                    ->nullable()
+                    ->maxLength(255),
+
                 FileUpload::make('image')
                     ->image()
+                    ->disk('public')
+                    ->directory('banners')
                     ->required(),
+
                 Select::make('type')
+                    ->label('Type')
                     ->options(['slider' => 'Slider', 'grid' => 'Grid'])
                     ->default('slider')
                     ->required(),
+
                 TextInput::make('position')
-                    ->required()
                     ->numeric()
                     ->default(0),
+
                 Toggle::make('status')
-                    ->required(),
+                    ->default(true),
             ]);
     }
 }
