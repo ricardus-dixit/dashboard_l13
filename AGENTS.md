@@ -58,6 +58,46 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - Be concise in your explanations - focus on what's important rather than explaining obvious details.
 
+## Git Commit Convention
+
+- All commit messages MUST follow Conventional Commits.
+- Use this format: `<type>(<scope>): <subject>`
+- `scope` is REQUIRED and MUST be one of:
+    - `api`, `auth`, `config`, `db`, `deps`, `docs`, `jobs`, `mail`, `models`, `policies`, `queue`, `routes`, `tests`, `ui`, `validation`
+- `subject` MUST be lowercase, imperative, and no trailing period.
+- Commit messages MUST be written in Spanish.
+- Keep subject length at 72 characters or fewer.
+- For breaking changes, add `!` after type/scope and include a `BREAKING CHANGE:` footer.
+
+### Allowed Types
+
+- `feat`: New functionality visible to users or developers.
+- `fix`: Bug fix or regression fix.
+- `refactor`: Internal code change without behavior change.
+- `perf`: Performance improvement.
+- `test`: Add or update tests only.
+- `docs`: Documentation-only changes.
+- `style`: Formatting-only changes (no logic changes).
+- `build`: Build system, tooling, or CI dependency updates.
+- `ci`: CI pipeline changes.
+- `chore`: Maintenance tasks that do not fit another type.
+- `revert`: Revert a previous commit.
+
+### Valid Examples
+
+- `feat(auth): agregar expiracion de sesion por inactividad`
+- `fix(api): corregir validacion de cabecera authorization`
+- `refactor(models): simplificar relacion entre usuario y perfil`
+- `test(tests): cubrir caso de bloqueo por intentos fallidos`
+- `chore(deps): actualizar dependencias de desarrollo`
+
+### Invalid Examples
+
+- `update stuff` (missing type and scope)
+- `feat: agregar login` (missing required scope)
+- `Fix(API): Corregir bug.` (wrong case and trailing period)
+- `docs(readme): Updated README` (subject not in Spanish)
+
 === boost rules ===
 
 # Laravel Boost
@@ -95,7 +135,7 @@ This project has domain-specific skills available. You MUST activate the relevan
 
 - Execute PHP in app context for debugging and testing code. Do not create models without user approval, prefer tests with factories instead. Prefer existing Artisan commands over custom tinker code.
 - Always use single quotes to prevent shell expansion: `php artisan tinker --execute 'Your::code();'`
-  - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
+    - Double quotes for PHP strings inside: `php artisan tinker --execute 'User::where("active", true)->count();'`
 
 === php rules ===
 
