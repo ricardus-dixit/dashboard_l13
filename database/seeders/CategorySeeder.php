@@ -15,30 +15,35 @@ class CategorySeeder extends Seeder
     {
         $technology = Category::create([
             'name' => 'Technology',
+            'slug' => 'technology',
             'position' => 1,
             'level' => 1
         ]);
 
         $smartphones = $technology->children()->create([
             'name' => 'Smartphones',
+            'slug' => 'smartphones',
             'position' => 1,
             'level' => 2
         ]);
 
         $smartphones->children()->create([
-            'name' => 'Motorola',
+            'name' => 'Smartwatch',
+            'slug' => 'smartwatch',
             'position' => 1,
             'level' => 3
         ]);
 
         Category::create([
             'name' => 'Home',
+            'slug' => 'home',
             'position' => 2,
             'level' => 1
         ]);
 
         Category::create([
             'name' => 'Electronics',
+            'slug' => 'electronics',
             'position' => 3,
             'level' => 1
         ]);

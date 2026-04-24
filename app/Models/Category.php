@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Model;
-use Pest\Support\Str;
+use Illuminate\Support\Str;
 
 #[Fillable([
     'parent_id',
@@ -39,7 +39,7 @@ class Category extends Model
 
         static::creating(function($category) {
             if (empty($category->slug)) {
-                $category->slug = Str::slugify($category->name);
+                $category->slug = Str::slug($category->name);
             }
         });
     }
