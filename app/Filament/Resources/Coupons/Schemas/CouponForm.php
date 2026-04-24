@@ -15,25 +15,34 @@ class CouponForm
         return $schema
             ->components([
                 TextInput::make('code')
-                    ->required(),
+                    ->required()
+                    ->unique(ignoreRecord:true),
+
                 Select::make('type')
-                    ->options(['fixed' => 'Fixed', 'percentage' => 'Percentage'])
+                    ->options(['fixed' => 'Fixed amount', 'percentage' => 'Percentage'])
                     ->default('fixed')
                     ->required(),
+
                 TextInput::make('value')
                     ->required()
                     ->numeric(),
+
                 TextInput::make('min_cart_value')
-                    ->numeric(),
-                TextInput::make('usage_limit')
-                    ->numeric(),
-                TextInput::make('used_count')
-                    ->required()
+                    ->label('Minimum Cart Value')
                     ->numeric()
-                    ->default(0),
-                DatePicker::make('expires_at'),
+                    ->nullable(),
+
+                TextInput::make('usage_limit')
+                    ->numeric()
+                    ->nullable(),
+
+                DatePicker::make('expires_at')
+                    ->native(false)
+                    ->displayFormat('d/m/Y')
+                    ->label('Expiry Date'),
+
                 Toggle::make('status')
-                    ->required(),
+                    ->default(true),
             ]);
     }
 }

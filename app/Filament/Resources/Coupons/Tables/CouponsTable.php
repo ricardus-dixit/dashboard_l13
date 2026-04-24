@@ -16,30 +16,49 @@ class CouponsTable
         return $table
             ->columns([
                 TextColumn::make('code')
-                    ->searchable(),
+                    ->searchable()
+                    ->sortable(),
+
                 TextColumn::make('type')
-                    ->badge(),
+                    ->badge()
+                    ->color(fn($state) => match($state) {
+                        'fixed' => 'success',
+                        'percentage' => 'info'
+                    }),
+
                 TextColumn::make('value')
-                    ->numeric()
-                    ->sortable(),
+                    ->formatStateUsing(fn($record) =>
+                        $record->type === 'fixed'
+                            ? '$' . $record->value
+                            : $record->value . '%'
+                    ),
+
                 TextColumn::make('min_cart_value')
-                    ->numeric()
-                    ->sortable(),
+                    ->label('Min Value')
+                    ->formatStateUsing(fn($state) => 
+                        $state ? '$' . $state : '-'
+                    ),
+
                 TextColumn::make('usage_limit')
                     ->numeric()
                     ->sortable(),
+
                 TextColumn::make('used_count')
                     ->numeric()
                     ->sortable(),
+
                 TextColumn::make('expires_at')
                     ->date()
                     ->sortable(),
+
                 IconColumn::make('status')
                     ->boolean(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
